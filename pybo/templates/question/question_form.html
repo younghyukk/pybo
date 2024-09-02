@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h5 class="my-3 border-bottom pb-2">Submit Question</h5>
+  <form method="post" class="post-form my-3">
+    <!-- CSRF Token -->
+    {{ form.csrf_token }}
+    <!-- Show Error -->
+    {% for field, errors in form.errors.items() %}
+    <div class="alert alert-danger" role="alert">
+      <strong>{{ form[field].label }}</strong>: {{ ', '.join(errors) }}
+    </div>
+    {% endfor %}
+    <!-- End Show Error -->
+    <!--
+    {{ form.subject.label }}
+    {{ form.subject(class="form-control") }}
+
+    {{ form.content.label }}
+    {{ form.content(class="form-control") }}
+    -->
+    <div class="form-group">
+      <label for="subject">Subject</label>
+      <input type="text" class="form-control" name="subject" id="subject" value="{{ form.subject.data or '' }}">
+    </div>
+    <div class="form-group">
+      <label for="content">Content</label>
+      <textarea class="form-control" name="content" id="content" rows="10">{{ form.content.data or '' }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+  </form>
+</div>
+{% endblock %}
