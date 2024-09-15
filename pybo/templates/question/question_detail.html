@@ -29,6 +29,12 @@
           {{ answer.create_date|datetime }}
         </div>
       </div>
+      {% if g.user == question.user %}
+      <div class="my-3">
+        <a href="{{ url_for('question.modify', question_id=question.id) }}" class="btn btn-sm btn-outline-secondary">Modify</a>
+        <a href="#" class="delete btn btn-sm btn-outline-secondary" data-uri="{{ url_for('question.delete', question_id=question.id) }}">Delete</a>
+      </div>
+      {% endif %}
     </div>
   </div>
   {% endfor %}
@@ -47,4 +53,14 @@
     <input type="submit" value="Submit Answer" class="btn btn-primary">
   </form>
 </div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+  $(document).ready(function(){
+    if(confirm("Really Delete?")) {
+      location.href = $(this).data('uri');
+      }
+    });
+  });
+</script>
 {% endblock %}

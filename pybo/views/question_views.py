@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, request, url_for, g
+from crypt import methods
+
+from flask import Blueprint, render_template, request, url_for, g, flash
 from datetime import datetime
 from pybo.models import Question
 from ..forms import QuestionForm, AnswerForm
@@ -45,3 +47,23 @@ def create():
         'question/question_form.html',
         form=form
     )
+
+@bp.route('/modify/<int:question_id>', methods=("GET", "POST"))
+@login_required
+def modify(question_id):
+    question = Question.query.get_or_404(question_id)
+
+    if g.user != question.user:
+        flash("No Modify Permission")
+        return redirect(url_for('question.detail', question_id=question_id))
+
+    if request.method == 'POST':
+        form = QuestionForm()
+        if form.validate_on_submit():
+            form.populate_obj(question)
+            question.modify_date = datetime.now() #Update modify date
+            db.session.commit()
+            return redirect(url_for('question.detail', question_id=question_id))
+    else: #IF method is GET
+        form = QuestionForm(obj=question)
+    return render_template('question/question_form.html', form=form)

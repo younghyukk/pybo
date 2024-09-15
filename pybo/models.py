@@ -12,6 +12,7 @@ class Question(db.Model):
     ), nullable=False)
 
     user = db.relationship('User', backref=db.backref('question_set'))
+    modify_date = db.Column(db.DateTime(), nullable=True)
 
 class Answer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -27,6 +28,7 @@ class Answer(db.Model):
     ), nullable=False)
 
     user = db.relationship('User', backref=db.backref('answer_set'))
+    modify_date = db.Column(db.DateTime(), nullable=True)
 
 
 class User(db.Model):

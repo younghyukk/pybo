@@ -19,7 +19,11 @@ def signup():
         if not user:
             user = User(
                 username=form.username.data,
-                password=generate_password_hash(form.password1.data),
+                password=generate_password_hash(
+                    password=form.password1.data,
+                    method='pbkdf2',
+                    salt_length=16
+                ),
                 email=form.email.data
             )
             db.session.add(user)
